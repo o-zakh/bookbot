@@ -1,23 +1,28 @@
 output_dict = {}
 dict_list = []
+book_path = "books/frankenstein.txt"
 
 def main():
-    lowered_letters_text = lower_letters(read_text("books/frankenstein.txt")) # Взяли текст и сделали все буквы маленькими
+    print(f"--- Begin report of {book_path} ---")
+    lowered_letters_text = lower_letters(read_text()) # Взяли текст и сделали все буквы маленькими
     char_num(lowered_letters_text) # Посчитали все буквы и добавили их в словарь output_dict
+    print(f"{count_words(read_text())} words found in the document")
+    print()
     dict_to_list()
-    print(dict_list)
+    dict_list.sort(reverse=True, key=sort_on)
+    for listed_dict in dict_list:
+        print(f"The '{listed_dict['letter']}' character was found {listed_dict['number']} times")
+    print("--- End report ---")
+
 
 # Функция открытия книги и возврата текста:
-def read_text(book_path):
-    print("Открываю книгу...")
+def read_text():
     with open(book_path) as f:
         file_contents = f.read()
-        print("Возвращаю текст книги...")
         return file_contents
 
 # Функция подсчета слов в книге:
 def count_words(file_contents):
-    print("Начинаю подсчет слов")
     word_num = len(file_contents.split())
     return word_num
 
@@ -42,23 +47,14 @@ def char_num(text_to_process):
 def dict_to_list():
     temp_dict = {}
     for key, value in output_dict.items():
-        temp_dict['letter'] = key
-        temp_dict['number'] = value
-        dict_list.append(temp_dict)
-        temp_dict = {}
-
-
-
-"""
-# Функция разделяет значения в словаре на лист из словарей:
-def create_list(dict):
-    i = 0
-    for i in dict:
-
+        if key.isalpha():
+            temp_dict['letter'] = key
+            temp_dict['number'] = value
+            dict_list.append(temp_dict)
+            temp_dict = {}
 
 # Добавляю функцию сортировки словарей по второму индексу:
 def sort_on(dict):
-    return dict["num"]
-"""
+    return dict["number"]
 
 main()
